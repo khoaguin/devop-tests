@@ -1,0 +1,25 @@
+name: Simple Go Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go version
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.15.1"
+      - run: go run helloworld.go && echo ${{ vars.FILE_TO_CHECK }}
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - run: echo "deploying to production"
